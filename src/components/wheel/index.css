@@ -10,11 +10,12 @@
   --item-nb: 0;
   --selected-item: 0;
   --nb-turn: 1;
-  --spinning-duration: 4s;
+  --spinning-duration-per-round: 5s;
+  --spinning-duration: calc(var(--nb-turn) * 3s);
   /* --reset-duration: 0.01s; */
 }
 
-/* Conteneur de la roue = cercle rose extérieur */
+/* Wheel container = outer pink circle */
 .wheel-container {
   display: block;
   position: relative;
@@ -29,7 +30,7 @@
   user-select: none;
 }
 
-/* Triangle de sélection = 1 rose +  1 blanc */
+/* Selection triangle = 1 pink + 1 white */
 .wheel-container::before,
 .wheel-container::after {
   content: '';
@@ -54,7 +55,7 @@
   border-right-color: var(--neutral-color);
 }
 
-/* Roue */
+/* Wheel */
 .wheel {
   display: block;
   position: relative;
@@ -66,17 +67,17 @@
   border-radius: 50%;
   border: solid var(--wheel-color) var(--wheel-border-size);
   background-color: var(--wheel-color);
-  transition: transform var(--reset-duration);
+  /* transition: transform var(--reset-duration); */
   transform: rotate(0deg);
   cursor: pointer;
 }
 
 .wheel.spinning {
-  transition: transform var(--spinning-duration);
+  transition: transform var(--spinning-duration) linear;
   transform: rotate(calc(var(--nb-turn) * 360deg + (-360deg * var(--selected-item) / var(--nb-item, 1))));
 }
 
-/* Centre de la roue = rond blanc au centre */
+/* Center of the wheel = white circle in the center */
 .wheel::after {
   display: block;
   position: absolute;
@@ -91,12 +92,12 @@
   border-radius: 50%;
 }
 
-/* Element sur la roue */
+/* Element on the wheel */
 .wheel-item {
   display: block;
   position: absolute;
   box-sizing: border-box;
-  
+
   /* position de l'item */
   top: 50%;
   left: 50%;
@@ -104,14 +105,14 @@
   transform-origin: center left;
   transform: translateY(-50%) rotate(calc(var(--item-nb) * (360deg / var(--nb-item, 1))));
 
-  /* texte */
+  /* text */
   color: var(--neutral-color);
   text-align: right;
   padding: 0 25px 0 50px;
   font-family: var(--wheel-font);
 }
 
-/* Background de l'élément = triangle rose plus clair */
+/* Element background = lighter pink triangle */
 .wheel-item:before {
   content: ' ';
   display: block;
@@ -127,16 +128,16 @@
   opacity: 0.25;
 
   /* 
-    Largeur du triangle
-    Je ne sais pas pourquoi j'ai besoin d'ajouter 
-      " + var(--wheel-size) / 2 " dans slice-max-width  ==> donne 2.PI.R + R
-    mais globalement ca marche a peu près bien 
-    TODO: A étudier 
+Triangle width
+     I don't know why I need to add
+       " + var(--wheel-size) / 2 " in slice-max-width ==> gives 2.PI.R + R
+     but overall it works pretty well
+     TODO: To study 
   */
   --slice-max-width: calc(var(--PI) * var(--wheel-size) + var(--wheel-size) / 2);
   --slice-width: calc((var(--slice-max-width) / var(--nb-item)) - var(--wheel-slice-spacing));
   border: solid transparent calc(var(--slice-width) / 2);
   border-left: solid transparent 0;
-  /* profondeur du triangle = du centre de la roue à la bordure = 300px / 2 */
+  /* triangle depth = wheel center to border = 300px / 2 */
   border-right: solid var(--neutral-color) calc(var(--wheel-size) / 2);
 }
