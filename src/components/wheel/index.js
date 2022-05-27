@@ -6,29 +6,31 @@ const Wheel = (props) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [rotationCount, setRotationCount] = useState(100);
   const [isProcessing, setIsProcessing] = useState(false);
-  let durationPerOneRotation = 3
+  // const [reversedItems, setReversedItems] = useState();
+  const [startTime, setStartTime] = useState(0);
+  let durationPerOneRotation = 3; // the status depends heavily on the value of durationPerOneRotation: for example, if 20 => not correct
+  let spinning = selectedItem !== null ? 'spinning' : '';
+
 
 
   useEffect(() => {
-    setItems(props.items)
-    props.selectedItem && setSelectedItem(props.selectedItem);
-    console.log("props.selectedItem: ", props.selectedItem);
+    setItems(props.items);
+    // const reversedItems = ['Pizzas', 'Milk', 'Bread', 'Pastas', 'Japanese food', 'Soup', 'Salads', 'Sandwiches'];
+    // setReversedItems(reversedItems);
   }, [props.items]);
 
   const handleLottery = async () => {
+    setStartTime(Date.now());
     try {
       setIsProcessing(true)
       let _selectedItem = Math.floor(Math.random() * items?.length);
-      if (selectedItem === null) {
-        setSelectedItem(_selectedItem);
-      } else {
-        setSelectedItem(null);
+      setSelectedItem(null);
 
-        setTimeout(() => {
-          _selectedItem = 0
-          setSelectedItem(_selectedItem);
-        }, 500);
-      }
+      setTimeout(() => {
+        setSelectedItem(_selectedItem);
+        setRotationCount(100);
+      }, 500);
+      // }
     } catch (err) {
       console.log("err", err)
     }
@@ -40,21 +42,33 @@ const Wheel = (props) => {
     '--nb-turn': rotationCount,
     '--spinning-duration': `calc(${rotationCount} * ${durationPerOneRotation}s)`
   };
-  const spinning = selectedItem !== null ? 'spinning' : '';
 
   const handleSetRotationCount = () => {
-    setRotationCount(0)
+    const elapsedTime = (Date.now() - startTime) / 1000;
+    let passedItems = elapsedTime / durationPerOneRotation * 8 - Math.floor(elapsedTime / durationPerOneRotation) * 8;
+    let exactPassedItems = Math.floor(passedItems);
+    // if (passedItems - exactPassedItems > 0.5) exactPassedItems +=1;
+    console.log("exact passed items:", exactPassedItems);
+    setRotationCount(0); // stop the wheel directly
+    setSelectedItem(9 - exactPassedItems); // stop the wheel to default item
+
+    // console.log("clicked Item: ", items[9 - exactPassedItems]);
+
     setTimeout(() => {
-      setRotationCount(1)
-      setSelectedItem(Math.floor(Math.random() * 8))
+
+      setRotationCount(2);
+      let selected = Math.floor(Math.random() * 8);
+      // selected = 7;
+      setSelectedItem(selected);
+      console.log("selected item: ", items[selected]);
+
       setIsProcessing(false);
-    }, 50)
+    }, 5)
   }
 
   return (
     items && items.length > 0 && (
       <>
-        <button onClick={handleSetRotationCount} disabled={!isProcessing} style={{marginBottom:'15px'}}>Stop</button>
         <div className="wheel-container">
           <div className={`wheel ${spinning}`} style={wheelVars}>
             {items.map((item, index) => (
@@ -64,7 +78,9 @@ const Wheel = (props) => {
             ))}
           </div>
         </div>
-        <button onClick={() => handleLottery()} disabled={isProcessing} style={{marginTop:'15px'}}>Spin</button>
+        <button onClick={() => handleLottery()} disabled={isProcessing} style={{ marginTop: '15px' }}>Spin</button>
+        <button onClick={handleSetRotationCount} disabled={!isProcessing} style={{ marginBottom: '15px' }}>Stop</button>
+
       </>
     )
   );

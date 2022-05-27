@@ -5,6 +5,7 @@ import './styles.css';
 
 const App = () => {
   const places = ['Pizzas', 'Sandwiches', 'Salads', 'Soup', 'Japanese food', 'Pastas', 'Bread', 'Milk'];
+  // const places = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
   return (
     <div className="App">
