@@ -6,6 +6,7 @@ const Wheel = (props) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [rotationCount, setRotationCount] = useState(100);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [previousItem, setPreviousItem] = useState(0);
   // const [reversedItems, setReversedItems] = useState();
   const [startTime, setStartTime] = useState(0);
   let durationPerOneRotation = 3; // the status depends heavily on the value of durationPerOneRotation: for example, if 20 => not correct
@@ -23,8 +24,8 @@ const Wheel = (props) => {
     setStartTime(Date.now());
     try {
       setIsProcessing(true)
-      let _selectedItem = Math.floor(Math.random() * items?.length);
-      setSelectedItem(null);
+      let _selectedItem = 0;
+      setSelectedItem(selectedItem);
 
       setTimeout(() => {
         setSelectedItem(_selectedItem);
@@ -50,7 +51,9 @@ const Wheel = (props) => {
     // if (passedItems - exactPassedItems > 0.5) exactPassedItems +=1;
     console.log("exact passed items:", exactPassedItems);
     setRotationCount(0); // stop the wheel directly
-    setSelectedItem(9 - exactPassedItems); // stop the wheel to default item
+    let itemWhenClickedStopButton = 9 - exactPassedItems + previousItem;
+    if (itemWhenClickedStopButton > 8) itemWhenClickedStopButton-=8;
+    setSelectedItem(itemWhenClickedStopButton); // stop the wheel to default item
 
     // console.log("clicked Item: ", items[9 - exactPassedItems]);
 
@@ -58,8 +61,8 @@ const Wheel = (props) => {
 
       setRotationCount(2);
       let selected = Math.floor(Math.random() * 8);
-      // selected = 7;
       setSelectedItem(selected);
+      setPreviousItem(selected);
       console.log("selected item: ", items[selected]);
 
       setIsProcessing(false);
