@@ -12,8 +12,11 @@
   "main": "src/index.js",
   "dependencies": {
     "react": "^18.1.0",
+    "react-base-table": "^1.13.2",
+    "react-bootstrap": "^2.4.0",
     "react-dom": "^18.1.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "react-table": "^7.8.0"
   },
   "devDependencies": {},
   "scripts": {

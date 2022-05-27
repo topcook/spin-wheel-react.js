@@ -6,7 +6,6 @@ const Wheel = (props) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [rotationCount, setRotationCount] = useState(100);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [startTime, setStartTime] = useState(0);
   let durationPerOneRotation = 3
 
 
@@ -18,28 +17,18 @@ const Wheel = (props) => {
 
   const handleLottery = async () => {
     try {
-      console.log("handle lottery not passed");
       setIsProcessing(true)
-      setStartTime(Date.now())
-      console.log("startTime in handle lottery: ", Date.now());
-
-      console.log("selectedItem: ", selectedItem);
       let _selectedItem = Math.floor(Math.random() * items?.length);
       if (selectedItem === null) {
         setSelectedItem(_selectedItem);
-        console.log(" _selectedItem: ", _selectedItem);
-
       } else {
         setSelectedItem(null);
 
         setTimeout(() => {
           _selectedItem = 0
           setSelectedItem(_selectedItem);
-          console.log("set Time out selected item: ", _selectedItem);
         }, 500);
       }
-
-      // setIsProcessing(false)
     } catch (err) {
       console.log("err", err)
     }
@@ -54,25 +43,18 @@ const Wheel = (props) => {
   const spinning = selectedItem !== null ? 'spinning' : '';
 
   const handleSetRotationCount = () => {
-    let endTime = Date.now()
-    console.log("endTime: ", endTime)
-    console.log("startTime: ", startTime)
-    let elapsedTime = Math.floor((endTime - startTime) / 1000);
-    let elapsedRotationCount = Math.floor(elapsedTime / durationPerOneRotation);
-    console.log("elapsedTime: ", elapsedTime);
-    console.log("elapsedRotationCount: ", elapsedRotationCount);
-
     setRotationCount(0)
     setTimeout(() => {
       setRotationCount(1)
       setSelectedItem(Math.floor(Math.random() * 8))
+      setIsProcessing(false);
     }, 50)
   }
 
   return (
     items && items.length > 0 && (
       <>
-        <button onClick={handleSetRotationCount}>Test</button>
+        <button onClick={handleSetRotationCount} disabled={!isProcessing} style={{marginBottom:'15px'}}>Stop</button>
         <div className="wheel-container">
           <div className={`wheel ${spinning}`} style={wheelVars}>
             {items.map((item, index) => (
@@ -82,7 +64,7 @@ const Wheel = (props) => {
             ))}
           </div>
         </div>
-        <button onClick={() => handleLottery()} disabled={isProcessing}>Spin 0.05</button>
+        <button onClick={() => handleLottery()} disabled={isProcessing} style={{marginTop:'15px'}}>Spin</button>
       </>
     )
   );

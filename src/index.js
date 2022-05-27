@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import Wheel from './components/wheel';
-
 import './styles.css';
 
 const App = () => {
@@ -11,7 +9,7 @@ const App = () => {
   return (
     <div className="App">
       <h1>What should you eat today?</h1>
-      <Wheel items={places} selectedItem={8} />
+      <Wheel items={places} selectedItem={8} /> 
     </div>
   );
 }
