@@ -9,7 +9,7 @@
   --nb-item: 0;
   --item-nb: 0;
   --selected-item: 0;
-  --nb-turn: 1;
+  --nb-turn: 2;
   --spinning-duration-per-round: 5s;
   --spinning-duration: calc(var(--nb-turn) * 3s);
   /* --reset-duration: 0.01s; */
@@ -76,7 +76,6 @@
   transition: transform var(--spinning-duration) linear;
   /* transform: rotate(calc(var(--nb-turn) * 360deg + (-360deg * var(--selected-item) / var(--nb-item, 1)))); */
   transform: rotate(calc(var(--nb-turn) * 360deg + (360deg * (var(--nb-item) - var(--selected-item)) / var(--nb-item, 1))));
-
 }
 
 /* Center of the wheel = white circle in the center */
